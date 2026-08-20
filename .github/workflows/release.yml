@@ -52,7 +52,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          echo "============================================"
           echo "Checking PHP syntax..."
+          echo "============================================"
 
           mapfile -d '' PHP_FILES < <(
             find . \
@@ -60,6 +62,7 @@ jobs:
               -name '*.php' \
               -not -path './vendor/*' \
               -not -path './wordpress/*' \
+              -not -path './.git/*' \
               -print0
           )
 
@@ -73,6 +76,7 @@ jobs:
             php -l "${file}"
           done
 
+          echo ""
           echo "All PHP files passed syntax validation."
 
   # ============================================
@@ -110,6 +114,9 @@ jobs:
           extensions: mysqli, curl, zip, dom, mbstring
           coverage: none
 
+      # ==========================================
+      # Install WP-CLI
+      # ==========================================
       - name: Install WP-CLI
         shell: bash
         run: |
@@ -124,6 +131,9 @@ jobs:
 
           wp --info
 
+      # ==========================================
+      # Download WordPress
+      # ==========================================
       - name: Download WordPress
         shell: bash
         run: |
@@ -134,6 +144,9 @@ jobs:
             --version=latest \
             --allow-root
 
+      # ==========================================
+      # Create wp-config.php
+      # ==========================================
       - name: Create wp-config.php
         working-directory: wordpress
         shell: bash
@@ -152,6 +165,9 @@ jobs:
           wp config set WP_DEBUG_LOG true --raw --allow-root
           wp config set WP_DEBUG_DISPLAY false --raw --allow-root
 
+      # ==========================================
+      # Install WordPress
+      # ==========================================
       - name: Install WordPress
         working-directory: wordpress
         shell: bash
@@ -169,6 +185,9 @@ jobs:
 
           echo "WordPress installed successfully."
 
+      # ==========================================
+      # Install WooCommerce
+      # ==========================================
       - name: Install WooCommerce
         working-directory: wordpress
         shell: bash
@@ -188,6 +207,9 @@ jobs:
 
           echo "WooCommerce installed and activated."
 
+      # ==========================================
+      # Copy ONLY plugin files
+      # ==========================================
       - name: Copy plugin files
         shell: bash
         run: |
@@ -195,23 +217,46 @@ jobs:
 
           PLUGIN_DIR="wordpress/wp-content/plugins/${PLUGIN_SLUG}"
 
+          rm -rf "${PLUGIN_DIR}"
           mkdir -p "${PLUGIN_DIR}"
 
+          echo "============================================"
           echo "Copying plugin files..."
+          echo "============================================"
 
-          rsync -a \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='wordpress/' \
-            --exclude='build/' \
-            --exclude='.gitignore' \
-            --exclude='*.zip' \
-            --exclude='*.log' \
-            ./ "${PLUGIN_DIR}/"
+          # Main plugin file
+          cp "${PLUGIN_FILE}" "${PLUGIN_DIR}/"
 
-          echo "Plugin files:"
+          # ONLY these directories are part of the plugin.
+          PLUGIN_DIRS=(
+            "admin"
+            "ajax"
+            "assets"
+            "coupons"
+            "discounts"
+            "includes"
+            "languages"
+            "orders"
+            "public"
+            "shipping"
+          )
+
+          for directory in "${PLUGIN_DIRS[@]}"; do
+            if [ -d "${directory}" ]; then
+              echo "Including: ${directory}/"
+              cp -a "${directory}" "${PLUGIN_DIR}/"
+            else
+              echo "WARNING: ${directory}/ not found."
+            fi
+          done
+
+          echo ""
+          echo "Plugin files copied:"
           find "${PLUGIN_DIR}" -type f | sort
 
+      # ==========================================
+      # Validate plugin structure
+      # ==========================================
       - name: Validate plugin structure
         working-directory: wordpress
         shell: bash
@@ -220,25 +265,50 @@ jobs:
 
           PLUGIN_DIR="wp-content/plugins/${PLUGIN_SLUG}"
 
+          echo "============================================"
+          echo "Validating plugin structure..."
+          echo "============================================"
+
+          # Main plugin file
           if [ ! -f "${PLUGIN_DIR}/${PLUGIN_FILE}" ]; then
-            echo "Main plugin file not found: ${PLUGIN_FILE}"
+            echo "ERROR: Main plugin file not found:"
+            echo "${PLUGIN_FILE}"
             exit 1
           fi
 
-          if [ -d "${PLUGIN_DIR}/includes" ]; then
-            echo "Includes directory found."
-          else
-            echo "Warning: includes directory not found."
-          fi
+          echo "Main plugin file found:"
+          echo "${PLUGIN_FILE}"
 
-          if [ -d "${PLUGIN_DIR}/assets" ]; then
-            echo "Assets directory found."
-          else
-            echo "Warning: assets directory not found."
-          fi
+          # Required directories
+          REQUIRED_DIRS=(
+            "admin"
+            "ajax"
+            "assets"
+            "coupons"
+            "discounts"
+            "includes"
+            "languages"
+            "orders"
+            "public"
+            "shipping"
+          )
 
+          for directory in "${REQUIRED_DIRS[@]}"; do
+            if [ ! -d "${PLUGIN_DIR}/${directory}" ]; then
+              echo "ERROR: Required directory not found:"
+              echo "${directory}/"
+              exit 1
+            fi
+
+            echo "Found: ${directory}/"
+          done
+
+          echo ""
           echo "Plugin structure is valid."
 
+      # ==========================================
+      # Activate Plugin
+      # ==========================================
       - name: Activate plugin
         working-directory: wordpress
         shell: bash
@@ -248,6 +318,7 @@ jobs:
           echo "Plugins before activation:"
           wp plugin list --allow-root
 
+          echo ""
           echo "Activating ${PLUGIN_SLUG}..."
 
           wp plugin activate "${PLUGIN_SLUG}" --allow-root
@@ -257,15 +328,21 @@ jobs:
             exit 1
           fi
 
+          echo ""
           echo "Plugin activated successfully."
 
+      # ==========================================
+      # Test Plugin Functionality
+      # ==========================================
       - name: Test plugin functionality
         working-directory: wordpress
         shell: bash
         run: |
           set -euo pipefail
 
+          echo "============================================"
           echo "Running plugin functionality checks..."
+          echo "============================================"
 
           wp eval '
             if (!defined("ABSPATH")) {
@@ -290,8 +367,12 @@ jobs:
 
           wp plugin list --status=active --allow-root
 
+          echo ""
           echo "Plugin functionality checks completed."
 
+      # ==========================================
+      # Check WordPress Errors
+      # ==========================================
       - name: Check WordPress errors
         if: always()
         working-directory: wordpress
@@ -306,7 +387,10 @@ jobs:
             exit 0
           fi
 
+          echo "============================================"
           echo "WordPress debug log:"
+          echo "============================================"
+
           cat "${DEBUG_LOG}"
 
           if grep -Eiq \
@@ -318,8 +402,12 @@ jobs:
             exit 1
           fi
 
+          echo ""
           echo "No fatal PHP errors found."
 
+      # ==========================================
+      # Test Summary
+      # ==========================================
       - name: Generate test summary
         if: always()
         shell: bash
@@ -334,11 +422,15 @@ jobs:
             echo "| WooCommerce | Installed |"
             echo "| Plugin Activation | Tested |"
             echo "| Runtime Check | Tested |"
+            echo "| Fatal Error Check | Tested |"
             echo ""
             echo "**Branch/Ref:** ${GITHUB_REF_NAME}"
             echo "**Commit:** ${GITHUB_SHA::7}"
           } >> "${GITHUB_STEP_SUMMARY}"
 
+      # ==========================================
+      # Upload Debug Log
+      # ==========================================
       - name: Upload WordPress debug log
         if: always()
         uses: actions/upload-artifact@v4
@@ -391,7 +483,6 @@ jobs:
             VERSION="dev-${GITHUB_SHA::7}"
           fi
 
-          # Remove v prefix if supplied manually.
           VERSION="${VERSION#v}"
 
           if [[ ! "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] &&
@@ -413,10 +504,13 @@ jobs:
         run: |
           set -euo pipefail
 
+          echo "============================================"
           echo "Validating plugin structure..."
+          echo "============================================"
 
           if [ ! -f "${PLUGIN_FILE}" ]; then
-            echo "Main plugin file not found: ${PLUGIN_FILE}"
+            echo "ERROR: Main plugin file not found:"
+            echo "${PLUGIN_FILE}"
             exit 1
           fi
 
@@ -428,20 +522,37 @@ jobs:
           )"
 
           if [ -z "${PLUGIN_VERSION}" ]; then
-            echo "Could not determine plugin version."
+            echo "ERROR: Could not determine plugin version."
             exit 1
           fi
 
           echo "Plugin version: ${PLUGIN_VERSION}"
           echo "Build version: ${{ steps.version.outputs.version }}"
 
-          for directory in includes assets; do
-            if [ -d "${directory}" ]; then
-              echo "Found: ${directory}/"
-            else
-              echo "Warning: ${directory}/ not found."
+          REQUIRED_DIRS=(
+            "admin"
+            "ajax"
+            "assets"
+            "coupons"
+            "discounts"
+            "includes"
+            "languages"
+            "orders"
+            "public"
+            "shipping"
+          )
+
+          for directory in "${REQUIRED_DIRS[@]}"; do
+            if [ ! -d "${directory}" ]; then
+              echo "ERROR: Required directory missing: ${directory}/"
+              exit 1
             fi
+
+            echo "Found: ${directory}/"
           done
+
+          echo ""
+          echo "Plugin structure is valid."
 
       # ==========================================
       # Verify Tag Version
@@ -474,7 +585,7 @@ jobs:
           echo "Plugin and release versions match: ${RELEASE_VERSION}"
 
       # ==========================================
-      # Prepare Package
+      # Prepare Clean Package
       # ==========================================
       - name: Prepare plugin files
         shell: bash
@@ -483,25 +594,99 @@ jobs:
 
           BUILD_DIR="build/${PLUGIN_SLUG}"
 
+          rm -rf "${BUILD_DIR}"
           mkdir -p "${BUILD_DIR}"
 
-          echo "Preparing plugin package..."
+          echo "============================================"
+          echo "Preparing CLEAN plugin package..."
+          echo "============================================"
 
-          rsync -a \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='wordpress/' \
-            --exclude='build/' \
-            --exclude='.gitignore' \
-            --exclude='*.zip' \
-            --exclude='*.log' \
-            --exclude='node_modules/' \
-            --exclude='vendor/' \
-            ./ "${BUILD_DIR}/"
+          # ========================================
+          # Main plugin file
+          # ========================================
+          echo "Including: ${PLUGIN_FILE}"
+          cp "${PLUGIN_FILE}" "${BUILD_DIR}/"
+
+          # ========================================
+          # ONLY plugin directories
+          # ========================================
+          PLUGIN_DIRS=(
+            "admin"
+            "ajax"
+            "assets"
+            "coupons"
+            "discounts"
+            "includes"
+            "languages"
+            "orders"
+            "public"
+            "shipping"
+          )
+
+          for directory in "${PLUGIN_DIRS[@]}"; do
+            if [ -d "${directory}" ]; then
+              echo "Including: ${directory}/"
+              cp -a "${directory}" "${BUILD_DIR}/"
+            else
+              echo "ERROR: Required directory missing: ${directory}/"
+              exit 1
+            fi
+          done
 
           echo ""
-          echo "Files included in package:"
+          echo "============================================"
+          echo "Package contents:"
+          echo "============================================"
+
           find "${BUILD_DIR}" -type f | sort
+
+          echo ""
+          echo "============================================"
+          echo "Package directories:"
+          echo "============================================"
+
+          find "${BUILD_DIR}" -type d | sort
+
+      # ==========================================
+      # Verify Package Contents
+      # ==========================================
+      - name: Verify package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_DIR="build/${PLUGIN_SLUG}"
+
+          echo "Verifying package contents..."
+
+          # Files/directories that MUST NOT exist
+          FORBIDDEN_ITEMS=(
+            ".git"
+            ".github"
+            ".gitignore"
+            "README.md"
+            "README.fa.md"
+            "LICENSE"
+            "release.sh"
+            "release.bat"
+            "wordpress"
+            "build"
+          )
+
+          for item in "${FORBIDDEN_ITEMS[@]}"; do
+            if [ -e "${BUILD_DIR}/${item}" ]; then
+              echo "ERROR: Forbidden item found in package: ${item}"
+              exit 1
+            fi
+          done
+
+          # Main plugin file must exist
+          if [ ! -f "${BUILD_DIR}/${PLUGIN_FILE}" ]; then
+            echo "ERROR: Main plugin file missing from package."
+            exit 1
+          fi
+
+          echo "Package contents are clean."
 
       # ==========================================
       # Create ZIP
@@ -515,6 +700,8 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           ZIP_NAME="${PLUGIN_SLUG}-v${VERSION}.zip"
 
+          rm -f "${ZIP_NAME}"
+
           cd build
 
           echo "Creating ${ZIP_NAME}..."
@@ -526,7 +713,10 @@ jobs:
           echo "zip_name=${ZIP_NAME}" >> "${GITHUB_OUTPUT}"
 
           echo ""
+          echo "============================================"
           echo "ZIP contents:"
+          echo "============================================"
+
           unzip -l "${ZIP_NAME}"
 
           echo ""
@@ -557,11 +747,14 @@ jobs:
             - Brand-based discount rules
             - Multiple discount rules within a single coupon
             - Percentage-based discounts
+            - Fixed-amount discounts
+            - Free shipping support
             - WooCommerce integration
+            - Discount information in cart, checkout, orders and emails
 
             ### 🧪 Automated Tests
 
-            This release has passed the following automated checks:
+            This release has passed:
 
             - ✅ PHP syntax validation
             - ✅ WordPress installation test
@@ -570,6 +763,7 @@ jobs:
             - ✅ Plugin runtime check
             - ✅ Fatal PHP error detection
             - ✅ Plugin structure validation
+            - ✅ Package content validation
             - ✅ Version validation
 
             ### 📦 Installation
@@ -581,10 +775,6 @@ jobs:
             5. Install and activate the plugin.
             6. Make sure WooCommerce is installed and activated.
 
-            ### 🔄 Changes
-
-            See the automatically generated release notes and the project changelog for detailed changes in this version.
-
             ---
 
             ## 🇮🇷 فارسی
@@ -595,11 +785,15 @@ jobs:
 
             - ساخت کدهای تخفیف پیشرفته
             - اعمال تخفیف بر اساس محصولات
-            - اعمال تخفیف بر اساس دسته‌بندی محصولات
+            - اعمال تخفیف بر اساس دسته‌بندی
             - اعمال تخفیف بر اساس برند
-            - امکان تعریف چند قانون تخفیف در یک کد تخفیف
+            - تعریف چند قانون تخفیف در یک کد
             - پشتیبانی از تخفیف درصدی
-            - یکپارچگی با WooCommerce
+            - پشتیبانی از تخفیف مبلغ ثابت
+            - پشتیبانی از ارسال رایگان
+            - یکپارچگی کامل با WooCommerce
+            - نمایش اطلاعات تخفیف در سبد خرید و تسویه حساب
+            - ذخیره اطلاعات تخفیف در سفارش‌ها
 
             ### 🧪 تست‌های خودکار
 
@@ -607,11 +801,12 @@ jobs:
 
             - ✅ بررسی Syntax کدهای PHP
             - ✅ نصب WordPress
-            - ✅ نصب و فعال‌سازی WooCommerce
+            - ✅ نصب WooCommerce
             - ✅ فعال‌سازی افزونه
             - ✅ بررسی اجرای افزونه
-            - ✅ بررسی خطاهای Fatal در PHP
+            - ✅ بررسی خطاهای Fatal
             - ✅ بررسی ساختار افزونه
+            - ✅ بررسی محتوای ZIP
             - ✅ بررسی تطابق نسخه افزونه و Release
 
             ### 📦 نحوه نصب
@@ -619,13 +814,9 @@ jobs:
             1. فایل ZIP را از بخش Assets همین Release دانلود کنید.
             2. وارد **پیشخوان وردپرس → افزونه‌ها → افزودن** شوید.
             3. روی **بارگذاری افزونه** کلیک کنید.
-            4. فایل ZIP دانلودشده را انتخاب کنید.
-            5. افزونه را نصب و فعال کنید.
-            6. مطمئن شوید WooCommerce نیز نصب و فعال باشد.
-
-            ### 🔄 تغییرات
-
-            برای مشاهده جزئیات تغییرات این نسخه، Release Notes تولیدشده توسط GitHub و Changelog پروژه را مشاهده کنید.
+            4. فایل ZIP را انتخاب کنید.
+            5. نصب و فعال‌سازی را انجام دهید.
+            6. مطمئن شوید WooCommerce نصب و فعال است.
 
             ---
 
@@ -671,5 +862,5 @@ jobs:
             echo "- Plugin activation"
             echo "- Runtime checks"
             echo "- Fatal error detection"
-            echo "- Package validation"
+            echo "- Package content validation"
           } >> "${GITHUB_STEP_SUMMARY}"

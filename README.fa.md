@@ -6,13 +6,13 @@
 
 <p align="center">
   <a href="https://github.com/alirezasayadi/woocommerce-advanced-discount-builder/releases/latest">
-    <img src="https://img.shields.io/github/v/release/alirezasayadi/woocommerce-advanced-discount-builder?label=آخرین%20نسخه" alt="آخرین نسخه">
+    <img src="https://img.shields.io/github/v/release/alirezasayadi/woocommerce-advanced-discount-builder?label=Latest%20Release" alt="Latest Release">
   </a>
   <a href="https://github.com/alirezasayadi/woocommerce-advanced-discount-builder/releases">
-    <img src="https://img.shields.io/github/downloads/alirezasayadi/woocommerce-advanced-discount-builder/total?label=دانلودها" alt="دانلودها">
+    <img src="https://img.shields.io/github/downloads/alirezasayadi/woocommerce-advanced-discount-builder/total?label=Downloads" alt="Downloads">
   </a>
   <a href="https://github.com/alirezasayadi/woocommerce-advanced-discount-builder/releases">
-    <img src="https://img.shields.io/github/release-date/alirezasayadi/woocommerce-advanced-discount-builder?label=تاریخ%20انتشار" alt="تاریخ انتشار">
+    <img src="https://img.shields.io/github/release-date/alirezasayadi/woocommerce-advanced-discount-builder?label=Released" alt="Release Date">
   </a>
   <a href="https://github.com/alirezasayadi/woocommerce-advanced-discount-builder/actions">
     <img src="https://img.shields.io/github/actions/workflow/status/alirezasayadi/woocommerce-advanced-discount-builder/test-and-release.yml?label=Build%20%26%20Tests" alt="Build & Tests">
