@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Advanced WooCommerce discount code generator
  * Description: An advanced WordPress/WooCommerce plugin for creating flexible discount coupons with product, category, brand, and shipping-based rules.
- * Version: 3.0.0
+ * Version: 1.0.0
  * Author: Alireza Sayadi
  * Author URI: https://github.com/alirezasayadi
  * Text Domain: wdb-discount-builder
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') || exit;
 
-define('WDBP_VERSION', '3.0.0');
+define('WDBP_VERSION', '1.0.0');
 define('WDBP_URL', plugin_dir_url(__FILE__));
 define('WDBP_PATH', plugin_dir_path(__FILE__));
 

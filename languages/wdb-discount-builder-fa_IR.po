@@ -3,7 +3,7 @@
 # This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Advanced WooCommerce Discount Builder 3.0.0\n"
+"Project-Id-Version: Advanced WooCommerce Discount Builder 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/alirezasayadi\n"
 "POT-Creation-Date: 2026-08-20 12:00+0000\n"
 "PO-Revision-Date: 2026-08-20 17:26+0330\n"
