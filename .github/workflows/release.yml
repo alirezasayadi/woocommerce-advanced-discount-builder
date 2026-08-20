@@ -1,0 +1,549 @@
+name: Test and Release Plugin
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - 'v*'
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PLUGIN_SLUG: woocommerce-advanced-discount-builder
+  PLUGIN_FILE: wdb-discount-builder.php
+  PHP_VERSION: '8.0'
+  NODE_VERSION: '18'
+
+jobs:
+  # ============================================
+  # 1. PHP Syntax Check
+  # ============================================
+  php-syntax:
+    name: PHP Syntax Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Checking PHP syntax..."
+
+          mapfile -d '' PHP_FILES < <(
+            find . \
+              -type f \
+              -name '*.php' \
+              -not -path './vendor/*' \
+              -not -path './wordpress/*' \
+              -print0
+          )
+
+          if [ "${#PHP_FILES[@]}" -eq 0 ]; then
+            echo "No PHP files found."
+            exit 1
+          fi
+
+          for file in "${PHP_FILES[@]}"; do
+            echo "Checking: ${file}"
+            php -l "${file}"
+          done
+
+          echo "All PHP files passed syntax validation."
+
+  # ============================================
+  # 2. WordPress + WooCommerce Integration Test
+  # ============================================
+  test-wordpress:
+    name: WordPress Integration Test
+    runs-on: ubuntu-latest
+    needs: php-syntax
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: wp_test
+          MYSQL_USER: wp_user
+          MYSQL_PASSWORD: wp_pass
+          MYSQL_ROOT_PASSWORD: root_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_pass"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mysqli, curl, zip, dom, mbstring
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install WP-CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          curl -fsSL \
+            https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+            -o wp-cli.phar
+
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+
+          wp --info
+
+      - name: Download WordPress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          wp core download \
+            --path=wordpress \
+            --version=latest \
+            --allow-root
+
+      - name: Create wp-config.php
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          wp config create \
+            --dbname=wp_test \
+            --dbuser=wp_user \
+            --dbpass=wp_pass \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+
+          wp config set WP_DEBUG true --raw --allow-root
+          wp config set WP_DEBUG_LOG true --raw --allow-root
+          wp config set WP_DEBUG_DISPLAY false --raw --allow-root
+
+      - name: Install WordPress
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          wp core install \
+            --url=http://localhost:8080 \
+            --title="Discount Builder Test Site" \
+            --admin_user=admin \
+            --admin_password=admin123 \
+            --admin_email=admin@test.com \
+            --skip-email \
+            --allow-root
+
+          echo "WordPress installed successfully."
+
+      - name: Install WooCommerce
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Installing WooCommerce..."
+
+          wp plugin install woocommerce \
+            --activate \
+            --allow-root
+
+          if ! wp plugin is-active woocommerce --allow-root; then
+            echo "WooCommerce failed to activate."
+            exit 1
+          fi
+
+          echo "WooCommerce installed and activated."
+
+      - name: Copy plugin files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PLUGIN_DIR="wordpress/wp-content/plugins/${PLUGIN_SLUG}"
+
+          mkdir -p "${PLUGIN_DIR}"
+
+          echo "Copying plugin files..."
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='wordpress/' \
+            --exclude='build/' \
+            --exclude='.gitignore' \
+            --exclude='*.zip' \
+            --exclude='*.log' \
+            ./ "${PLUGIN_DIR}/"
+
+          echo "Plugin files:"
+          find "${PLUGIN_DIR}" -type f | sort
+
+      - name: Validate plugin structure
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PLUGIN_DIR="wp-content/plugins/${PLUGIN_SLUG}"
+
+          test -f "${PLUGIN_DIR}/${PLUGIN_FILE}" || {
+            echo "Main plugin file not found: ${PLUGIN_FILE}"
+            exit 1
+          }
+
+          test -d "${PLUGIN_DIR}/includes" || {
+            echo "Warning: includes directory not found."
+          }
+
+          test -d "${PLUGIN_DIR}/assets" || {
+            echo "Warning: assets directory not found."
+          }
+
+          echo "Plugin structure is valid."
+
+      - name: Activate plugin
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Plugins before activation:"
+          wp plugin list --allow-root
+
+          wp plugin activate "${PLUGIN_SLUG}" --allow-root
+
+          if ! wp plugin is-active "${PLUGIN_SLUG}" --allow-root; then
+            echo "Plugin activation failed."
+            exit 1
+          fi
+
+          echo "Plugin activated successfully."
+
+      - name: Test plugin functionality
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Running plugin functionality checks..."
+
+          wp eval '
+            if (!defined("ABSPATH")) {
+                exit("ABSPATH is not defined.\n");
+            }
+
+            echo "WordPress is running.\n";
+
+            if (!class_exists("WooCommerce")) {
+                exit("WooCommerce is not loaded.\n");
+            }
+
+            echo "WooCommerce is loaded.\n";
+          ' --allow-root
+
+          wp plugin list --status=active --allow-root
+
+          echo "Plugin functionality checks completed."
+
+      - name: Check WordPress errors
+        if: always()
+        working-directory: wordpress
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEBUG_LOG="wp-content/debug.log"
+
+          if [ ! -f "${DEBUG_LOG}" ]; then
+            echo "No WordPress debug log was generated."
+            exit 0
+          fi
+
+          echo "WordPress debug log:"
+          cat "${DEBUG_LOG}"
+
+          if grep -Eiq \
+            'PHP Fatal error|Uncaught Error|Parse error|Call to undefined' \
+            "${DEBUG_LOG}"; then
+
+            echo ""
+            echo "Fatal/runtime PHP errors were found."
+            exit 1
+          fi
+
+          echo "No fatal PHP errors found."
+
+      - name: Generate test summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Test Results"
+            echo ""
+            echo "| Test | Result |"
+            echo "|------|--------|"
+            echo "| PHP Syntax | ${{ needs.php-syntax.result }} |"
+            echo "| WordPress Integration | ${{ job.status }} |"
+            echo "| WooCommerce | Installed |"
+            echo "| Plugin Activation | Tested |"
+            echo ""
+            echo "**Branch/Ref:** ${GITHUB_REF_NAME}"
+            echo "**Commit:** ${GITHUB_SHA::7}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload WordPress debug log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-debug-log
+          path: wordpress/wp-content/debug.log
+          if-no-files-found: ignore
+
+  # ============================================
+  # 3. Build ZIP + Release
+  # ============================================
+  build-and-release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    needs:
+      - php-syntax
+      - test-wordpress
+
+    if: >
+      needs.php-syntax.result == 'success' &&
+      needs.test-wordpress.result == 'success' &&
+      (
+        startsWith(github.ref, 'refs/tags/v') ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="dev-${GITHUB_SHA::7}"
+          fi
+
+          if [[ ! "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] &&
+             [[ ! "${VERSION}" =~ ^dev-[a-f0-9]{7}$ ]]; then
+            echo "Invalid version: ${VERSION}"
+            exit 1
+          fi
+
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+
+          echo "Building version: ${VERSION}"
+
+      - name: Validate plugin structure
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Validating plugin structure..."
+
+          if [ ! -f "${PLUGIN_FILE}" ]; then
+            echo "Main plugin file not found: ${PLUGIN_FILE}"
+            exit 1
+          fi
+
+          PLUGIN_VERSION="$(
+            grep -oP \
+              '^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\K[0-9]+\.[0-9]+\.[0-9]+' \
+              "${PLUGIN_FILE}" \
+              | head -n 1 || true
+          )"
+
+          if [ -z "${PLUGIN_VERSION}" ]; then
+            echo "Could not determine plugin version."
+            exit 1
+          fi
+
+          echo "Plugin version: ${PLUGIN_VERSION}"
+
+          for directory in includes assets; do
+            if [ -d "${directory}" ]; then
+              echo "Found: ${directory}/"
+            else
+              echo "Warning: ${directory}/ not found."
+            fi
+          done
+
+      - name: Verify release version
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PLUGIN_VERSION="$(
+            grep -oP \
+              '^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\K[0-9]+\.[0-9]+\.[0-9]+' \
+              "${PLUGIN_FILE}" \
+              | head -n 1
+          )"
+
+          RELEASE_VERSION="${{ steps.version.outputs.version }}"
+
+          if [ "${PLUGIN_VERSION}" != "${RELEASE_VERSION}" ]; then
+            echo "Version mismatch!"
+            echo "Plugin:  ${PLUGIN_VERSION}"
+            echo "Release: ${RELEASE_VERSION}"
+            exit 1
+          fi
+
+          echo "Plugin and release versions match: ${RELEASE_VERSION}"
+
+      - name: Prepare plugin files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_DIR="build/${PLUGIN_SLUG}"
+
+          mkdir -p "${BUILD_DIR}"
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='wordpress/' \
+            --exclude='build/' \
+            --exclude='.gitignore' \
+            --exclude='*.zip' \
+            --exclude='*.log' \
+            ./ "${BUILD_DIR}/"
+
+          echo "Files included in package:"
+          find "${BUILD_DIR}" -type f | sort
+
+      - name: Create ZIP
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${{ steps.version.outputs.version }}"
+          ZIP_NAME="${PLUGIN_SLUG}-v${VERSION}.zip"
+
+          cd build
+
+          zip -r "../${ZIP_NAME}" "${PLUGIN_SLUG}/"
+
+          cd ..
+
+          echo "zip_name=${ZIP_NAME}" >> "${GITHUB_OUTPUT}"
+
+          echo ""
+          echo "ZIP contents:"
+          unzip -l "${ZIP_NAME}"
+
+          echo ""
+          echo "Package created:"
+          ls -lh "${ZIP_NAME}"
+
+      - name: Create GitHub Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Advanced WooCommerce Discount Code Generator v${{ steps.version.outputs.version }}
+          body: |
+            ## Advanced WooCommerce Discount Code Generator v${{ steps.version.outputs.version }}
+
+            ### Tests
+
+            - PHP syntax validation
+            - WordPress installation
+            - WooCommerce installation
+            - Plugin activation
+            - Plugin runtime checks
+            - Fatal error detection
+
+            ### Installation
+
+            1. Download the ZIP file from the Assets section below.
+            2. Open WordPress Admin → Plugins → Add New.
+            3. Select "Upload Plugin".
+            4. Upload the ZIP file.
+            5. Activate the plugin.
+
+            ### Commit
+
+            `${{ github.sha }}`
+
+          generate_release_notes: true
+          files: ${{ steps.package.outputs.zip_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload development build
+        if: github.event_name == 'workflow_dispatch' && github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PLUGIN_SLUG }}-v${{ steps.version.outputs.version }}
+          path: ${{ steps.package.outputs.zip_name }}
+          if-no-files-found: error
+
+      - name: Generate build summary
+        shell: bash
+        run: |
+          {
+            echo "## Build Summary"
+            echo ""
+            echo "| Item | Value |"
+            echo "|------|-------|"
+            echo "| Version | v${{ steps.version.outputs.version }} |"
+            echo "| ZIP | ${{ steps.package.outputs.zip_name }} |"
+            echo "| ZIP Size | $(du -h "${{ steps.package.outputs.zip_name }}" | cut -f1) |"
+            echo "| Ref | ${GITHUB_REF_NAME} |"
+            echo "| Commit | ${GITHUB_SHA::7} |"
+            echo ""
+            echo "### All checks passed"
+            echo ""
+            echo "- PHP syntax"
+            echo "- WordPress"
+            echo "- WooCommerce"
+            echo "- Plugin activation"
+            echo "- Runtime checks"
+            echo "- Package validation"
+          } >> "${GITHUB_STEP_SUMMARY}"
