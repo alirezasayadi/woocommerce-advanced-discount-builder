@@ -1,0 +1,426 @@
+# Copyright (C) 2026 Alireza Sayadi
+# This file is distributed under the GPL-3.0-or-later.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced WooCommerce Discount Builder 3.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/alirezasayadi\n"
+"POT-Creation-Date: 2026-08-20 17:26+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2\n"
+"X-Domain: wdb-discount-builder\n"
+
+#: wc-discount-builder-pro.php
+msgid "Advanced WooCommerce discount code generator"
+msgstr ""
+
+#: wc-discount-builder-pro.php
+msgid ""
+"An advanced WordPress/WooCommerce plugin for creating flexible discount "
+"coupons with product, category, brand, and shipping-based rules."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Advanced Discount Builder"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Settings saved."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Advanced WooCommerce Discount Builder"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Define discount codes and the rules for each code."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "+ Add New Discount Code"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Save All Settings"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Discount code deleted successfully."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Active"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Trashed"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Does not exist"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Discount Code:"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Example: SUMMER2026"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Status: %s"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "+ Add Rule"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Are you sure you want to delete this discount code?"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Delete Code"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Discount on Other Products (Non-eligible)"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "No Discount"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Percentage"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Fixed Amount"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Other products discount amount"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "This discount applies to products not specified in the rules above."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Free Shipping for This Discount Code"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid ""
+"When enabled, only the free shipping option will be displayed when this "
+"coupon is used."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "No rules defined yet."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Percentage (%)"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Fixed Amount (Toman)"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Discount amount"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Delete Rule"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Select by Product"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Select by Category"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Select by Brand"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Search products..."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "No products selected."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Search categories..."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "No categories selected."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Search brands..."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "No brands selected."
+msgstr ""
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Discount: -%s"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Toman"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "(%1$s per item)"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Discount:"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+msgid "Free shipping was active"
+msgstr ""
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Coupon: %s"
+msgstr ""
+
+#: ajax/class-wdb-ajax.php
+msgid "Unauthorized access."
+msgstr ""
+
+#: ajax/class-wdb-ajax.php
+msgid "products"
+msgstr ""
+
+#: ajax/class-wdb-ajax.php
+msgid "Coupon removed successfully."
+msgstr ""
+
+#: coupons/class-wdb-coupon-manager.php
+msgid "Created by Advanced WooCommerce Discount Builder"
+msgstr ""
+
+#: discounts/class-wdb-discount-engine.php
+#, php-format
+msgid ""
+"Warning: coupon %s is only valid for specific products. There are no "
+"eligible products in your cart."
+msgstr ""
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Coupon applied"
+msgstr ""
+
+#: discounts/class-wdb-discount-engine.php public/class-wdb-public.php
+msgid "Remove coupon"
+msgstr ""
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Only one coupon code is allowed. Please remove the previous one first."
+msgstr ""
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Only one coupon code is allowed. The previous code has been removed."
+msgstr ""
+
+#: includes/class-wdb-discount-builder.php
+msgid "requires WooCommerce to be installed and activated."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order Correction Tool"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid ""
+"Use this tool to correct previous orders that were placed with this plugin "
+"discount codes."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Fix a specific order:"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Enter order number"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Check and Fix Order"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Remove fees only:"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order number"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Remove Fees"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Bulk order correction:"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Coupon code (e.g.: SUMMER2026)"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Bulk Fix"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Order #%d not found!"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "This order has no coupons!"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Fee removed: %s"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Fee removed"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Discount: %1$s %2$s"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Coupon code not found!"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Coupon code %s not found!"
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "%d fee(s) removed and total corrected."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Invalid coupon code."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Invalid order number."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order not found."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "No fees found in this order."
+msgstr ""
+
+#: orders/class-wdb-order-fixer.php
+msgid "Progress has been reset."
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "Discount applied on cart products:"
+msgstr ""
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Total discount: %s Toman"
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid ""
+"The following products are in the \"Value Pack\" category and are not "
+"eligible for any discount:"
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "discount"
+msgstr ""
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Code: %s"
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid ""
+"Products in the \"Value Pack\" category are not eligible for any discounts "
+"or coupon codes and are excluded from discount calculations."
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "per item"
+msgstr ""
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Special Discount (%s)"
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "Are you sure you want to remove the coupon?"
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "Removing..."
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "Error removing coupon."
+msgstr ""
+
+#: public/class-wdb-public.php
+msgid "Server connection error."
+msgstr ""
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Free Shipping with Coupon Code"
+msgstr ""
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Free shipping activated"
+msgstr ""
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Your shipping cost has been successfully set to zero."
+msgstr ""
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Active coupon:"
+msgstr ""

@@ -1,0 +1,415 @@
+# Persian (Iran) translation for Advanced WooCommerce Discount Builder
+# Copyright (C) 2026 Alireza Sayadi
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced WooCommerce Discount Builder 3.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/alirezasayadi\n"
+"POT-Creation-Date: 2026-08-20 12:00+0000\n"
+"PO-Revision-Date: 2026-08-20 17:26+0330\n"
+"Last-Translator: Alireza Sayadi\n"
+"Language-Team: Persian\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.2\n"
+"X-Domain: wdb-discount-builder\n"
+
+#: wc-discount-builder-pro.php
+msgid "Advanced WooCommerce discount code generator"
+msgstr "کدتخفیف ساز پیشرفته ووکامرس"
+
+#: wc-discount-builder-pro.php
+msgid "An advanced WordPress/WooCommerce plugin for creating flexible discount coupons with product, category, brand, and shipping-based rules."
+msgstr "کدتخفیف ساز پیشرفته ووکامرس با قابلیت دسته‌بندی، برند، تخفیف روی سایر محصولات و ارسال رایگان."
+
+#: admin/class-wdb-admin.php
+msgid "Advanced Discount Builder"
+msgstr "ساز تخفیف پیشرفته"
+
+#: admin/class-wdb-admin.php
+msgid "Settings saved."
+msgstr "تنظیمات ذخیره شد."
+
+#: admin/class-wdb-admin.php
+msgid "Advanced WooCommerce Discount Builder"
+msgstr "ساز تخفیف پیشرفته ووکامرس"
+
+#: admin/class-wdb-admin.php
+msgid "Define discount codes and the rules for each code."
+msgstr "کدهای تخفیف و قوانین مربوط به هر کد را تعریف کنید."
+
+#: admin/class-wdb-admin.php
+msgid "+ Add New Discount Code"
+msgstr "+ افزودن کد تخفیف جدید"
+
+#: admin/class-wdb-admin.php
+msgid "Save All Settings"
+msgstr "ذخیره تمام تنظیمات"
+
+#: admin/class-wdb-admin.php
+msgid "Discount code deleted successfully."
+msgstr "کد تخفیف با موفقیت حذف شد."
+
+#: admin/class-wdb-admin.php
+msgid "Active"
+msgstr "فعال"
+
+#: admin/class-wdb-admin.php
+msgid "Trashed"
+msgstr "در سطل زباله"
+
+#: admin/class-wdb-admin.php
+msgid "Does not exist"
+msgstr "وجود ندارد"
+
+#: admin/class-wdb-admin.php
+msgid "Discount Code:"
+msgstr "کد تخفیف:"
+
+#: admin/class-wdb-admin.php
+msgid "Example: SUMMER2026"
+msgstr "مثال: SUMMER2026"
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Status: %s"
+msgstr "وضعیت: %s"
+
+#: admin/class-wdb-admin.php
+msgid "+ Add Rule"
+msgstr "+ افزودن قانون"
+
+#: admin/class-wdb-admin.php
+msgid "Are you sure you want to delete this discount code?"
+msgstr "آیا از حذف این کد تخفیف مطمئن هستید؟"
+
+#: admin/class-wdb-admin.php
+msgid "Delete Code"
+msgstr "حذف کد"
+
+#: admin/class-wdb-admin.php
+msgid "Discount on Other Products (Non-eligible)"
+msgstr "تخفیف روی سایر محصولات (غیرمشمول)"
+
+#: admin/class-wdb-admin.php
+msgid "No Discount"
+msgstr "بدون تخفیف"
+
+#: admin/class-wdb-admin.php
+msgid "Percentage"
+msgstr "درصدی"
+
+#: admin/class-wdb-admin.php
+msgid "Fixed Amount"
+msgstr "مبلغ ثابت"
+
+#: admin/class-wdb-admin.php
+msgid "Other products discount amount"
+msgstr "مقدار تخفیف سایر محصولات"
+
+#: admin/class-wdb-admin.php
+msgid "This discount applies to products not specified in the rules above."
+msgstr "این تخفیف روی محصولاتی که در قوانین بالا مشخص نشده‌اند اعمال می‌شود."
+
+#: admin/class-wdb-admin.php
+msgid "Free Shipping for This Discount Code"
+msgstr "ارسال رایگان برای این کد تخفیف"
+
+#: admin/class-wdb-admin.php
+msgid "When enabled, only the free shipping option will be displayed when this coupon is used."
+msgstr "با فعال کردن این گزینه، هنگام استفاده از این کد تخفیف، فقط گزینه ارسال رایگان نمایش داده می‌شود."
+
+#: admin/class-wdb-admin.php
+msgid "No rules defined yet."
+msgstr "هنوز قانونی تعریف نشده است."
+
+#: admin/class-wdb-admin.php
+msgid "Percentage (%)"
+msgstr "درصد (%)"
+
+#: admin/class-wdb-admin.php
+msgid "Fixed Amount (Toman)"
+msgstr "مبلغ ثابت (تومان)"
+
+#: admin/class-wdb-admin.php
+msgid "Discount amount"
+msgstr "مقدار تخفیف"
+
+#: admin/class-wdb-admin.php
+msgid "Delete Rule"
+msgstr "حذف قانون"
+
+#: admin/class-wdb-admin.php
+msgid "Select by Product"
+msgstr "انتخاب بر اساس محصول"
+
+#: admin/class-wdb-admin.php
+msgid "Select by Category"
+msgstr "انتخاب بر اساس دسته‌بندی"
+
+#: admin/class-wdb-admin.php
+msgid "Select by Brand"
+msgstr "انتخاب بر اساس برند"
+
+#: admin/class-wdb-admin.php
+msgid "Search products..."
+msgstr "جستجوی محصول..."
+
+#: admin/class-wdb-admin.php
+msgid "No products selected."
+msgstr "هیچ محصولی انتخاب نشده است."
+
+#: admin/class-wdb-admin.php
+msgid "Search categories..."
+msgstr "جستجوی دسته‌بندی..."
+
+#: admin/class-wdb-admin.php
+msgid "No categories selected."
+msgstr "هیچ دسته‌بندی انتخاب نشده است."
+
+#: admin/class-wdb-admin.php
+msgid "Search brands..."
+msgstr "جستجوی برند..."
+
+#: admin/class-wdb-admin.php
+msgid "No brands selected."
+msgstr "هیچ برندی انتخاب نشده است."
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Discount: -%s"
+msgstr "تخفیف: -%s"
+
+#: admin/class-wdb-admin.php
+msgid "Toman"
+msgstr "تومان"
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "(%1$s per item)"
+msgstr "(%1$s برای هر عدد)"
+
+#: admin/class-wdb-admin.php
+msgid "Discount:"
+msgstr "تخفیف:"
+
+#: admin/class-wdb-admin.php
+msgid "Free shipping was active"
+msgstr "ارسال رایگان فعال بوده است"
+
+#: admin/class-wdb-admin.php
+#, php-format
+msgid "Coupon: %s"
+msgstr "کد تخفیف: %s"
+
+#: ajax/class-wdb-ajax.php
+msgid "Unauthorized access."
+msgstr "دسترسی غیرمجاز."
+
+#: ajax/class-wdb-ajax.php
+msgid "products"
+msgstr "محصول"
+
+#: ajax/class-wdb-ajax.php
+msgid "Coupon removed successfully."
+msgstr "کوپن با موفقیت حذف شد."
+
+#: coupons/class-wdb-coupon-manager.php
+msgid "Created by Advanced WooCommerce Discount Builder"
+msgstr "ایجاد شده توسط ساز تخفیف پیشرفته ووکامرس"
+
+#: discounts/class-wdb-discount-engine.php
+#, php-format
+msgid "Warning: coupon %s is only valid for specific products. There are no eligible products in your cart."
+msgstr "⚠️ کد تخفیف %s فقط برای محصولات خاص معتبر است. هیچ محصول مشمولی در سبد خرید شما وجود ندارد."
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Coupon applied"
+msgstr "کد تخفیف اعمال شده"
+
+#: discounts/class-wdb-discount-engine.php public/class-wdb-public.php
+msgid "Remove coupon"
+msgstr "حذف کوپن"
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Only one coupon code is allowed. Please remove the previous one first."
+msgstr "فقط یک کد تخفیف مجاز است. لطفاً ابتدا کد قبلی را حذف کنید."
+
+#: discounts/class-wdb-discount-engine.php
+msgid "Only one coupon code is allowed. The previous code has been removed."
+msgstr "فقط یک کد تخفیف مجاز است. کد قبلی حذف شد."
+
+#: includes/class-wdb-discount-builder.php
+msgid "requires WooCommerce to be installed and activated."
+msgstr "نیاز به نصب و فعال‌سازی ووکامرس دارد."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order Correction Tool"
+msgstr "ابزار اصلاح سفارشات قبلی"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Use this tool to correct previous orders that were placed with this plugin discount codes."
+msgstr "با استفاده از این ابزار می‌توانید سفارشات قبلی که با کدهای تخفیف این افزونه ثبت شده‌اند را اصلاح کنید."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Fix a specific order:"
+msgstr "اصلاح یک سفارش خاص:"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Enter order number"
+msgstr "شماره سفارش را وارد کنید"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Check and Fix Order"
+msgstr "بررسی و اصلاح سفارش"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Remove fees only:"
+msgstr "فقط حذف نرخ‌ها:"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order number"
+msgstr "شماره سفارش"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Remove Fees"
+msgstr "حذف نرخ‌ها"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Bulk order correction:"
+msgstr "اصلاح دسته‌ای سفارشات:"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Coupon code (e.g.: SUMMER2026)"
+msgstr "کد تخفیف (مثلاً: SUMMER2026)"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Bulk Fix"
+msgstr "اصلاح دسته‌ای"
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Order #%d not found!"
+msgstr "سفارش #%d یافت نشد!"
+
+#: orders/class-wdb-order-fixer.php
+msgid "This order has no coupons!"
+msgstr "این سفارش هیچ کوپنی ندارد!"
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Fee removed: %s"
+msgstr "حذف نرخ: %s"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Fee removed"
+msgstr "نرخ حذف شد"
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Discount: %1$s %2$s"
+msgstr "تخفیف: %1$s %2$s"
+
+#: orders/class-wdb-order-fixer.php
+msgid "Coupon code not found!"
+msgstr "کد تخفیف یافت نشد!"
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "Coupon code %s not found!"
+msgstr "کد تخفیف %s یافت نشد!"
+
+#: orders/class-wdb-order-fixer.php
+#, php-format
+msgid "%d fee(s) removed and total corrected."
+msgstr "%d نرخ حذف شد و مجموع اصلاح شد."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Invalid coupon code."
+msgstr "کد تخفیف نامعتبر است."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Invalid order number."
+msgstr "شماره سفارش نامعتبر است."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Order not found."
+msgstr "سفارش یافت نشد."
+
+#: orders/class-wdb-order-fixer.php
+msgid "No fees found in this order."
+msgstr "هیچ نرخی در این سفارش وجود ندارد."
+
+#: orders/class-wdb-order-fixer.php
+msgid "Progress has been reset."
+msgstr "پیشرفت ریست شد."
+
+#: public/class-wdb-public.php
+msgid "Discount applied on cart products:"
+msgstr "تخفیف اعمال شده روی محصولات سبد خرید:"
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Total discount: %s Toman"
+msgstr "جمع کل تخفیف: %s تومان"
+
+#: public/class-wdb-public.php
+msgid "The following products are in the \"Value Pack\" category and are not eligible for any discount:"
+msgstr "محصولات زیر در دسته «پک به‌صرفه» هستند و هیچ تخفیفی روی آن‌ها اعمال نمی‌شود:"
+
+#: public/class-wdb-public.php
+msgid "discount"
+msgstr "تخفیف"
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Code: %s"
+msgstr "کد: %s"
+
+#: public/class-wdb-public.php
+msgid "Products in the \"Value Pack\" category are not eligible for any discounts or coupon codes and are excluded from discount calculations."
+msgstr "محصولات دسته «پک به صرفه» شامل هیچ‌گونه تخفیف یا کد تخفیف نمی‌شوند و از محاسبه تخفیف مستثنی هستند."
+
+#: public/class-wdb-public.php
+msgid "per item"
+msgstr "برای هر عدد"
+
+#: public/class-wdb-public.php
+#, php-format
+msgid "Special Discount (%s)"
+msgstr "تخفیف ویژه (%s)"
+
+#: public/class-wdb-public.php
+msgid "Are you sure you want to remove the coupon?"
+msgstr "آیا از حذف کوپن مطمئن هستید؟"
+
+#: public/class-wdb-public.php
+msgid "Removing..."
+msgstr "در حال حذف..."
+
+#: public/class-wdb-public.php
+msgid "Error removing coupon."
+msgstr "خطا در حذف کوپن."
+
+#: public/class-wdb-public.php
+msgid "Server connection error."
+msgstr "خطا در ارتباط با سرور."
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Free Shipping with Coupon Code"
+msgstr "ارسال رایگان با کد تخفیف"
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Free shipping activated"
+msgstr "ارسال رایگان فعال شد"
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Your shipping cost has been successfully set to zero."
+msgstr "هزینه ارسال سفارش شما با موفقیت صفر شد."
+
+#: shipping/class-wdb-free-shipping.php
+msgid "Active coupon:"
+msgstr "کد تخفیف فعال:"
