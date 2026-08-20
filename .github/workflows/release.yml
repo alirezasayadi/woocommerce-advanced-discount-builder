@@ -25,7 +25,7 @@ permissions:
 
 env:
   PLUGIN_SLUG: woocommerce-advanced-discount-builder
-  PLUGIN_FILE: wdb-discount-builder.php
+  PLUGIN_FILE: wc-discount-builder-pro.php
   PHP_VERSION: '8.0'
 
 jobs:
