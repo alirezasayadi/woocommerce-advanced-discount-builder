@@ -153,9 +153,10 @@ WPForge is not used for this project. The **Advanced WooCommerce Discount Code G
 The project provides two release scripts:
 
 ```text
-scripts/
+woocommerce-advanced-discount-builder/
 ├── release.bat
-└── release.sh
+├── release.sh
+└── ...
 ```
 
 * `release.bat` — for Windows
@@ -193,7 +194,7 @@ The release scripts will warn you if you are working on a different branch.
 Windows users should use:
 
 ```text
-scripts\release.bat
+release.bat
 ```
 
 ### 1. Open Command Prompt
@@ -211,7 +212,7 @@ You can use another path if your project is located elsewhere.
 ### 2. Run the release script
 
 ```bat
-scripts\release.bat
+release.bat
 ```
 
 The script will guide you through the release process.
@@ -292,7 +293,7 @@ You must confirm the release before the Git operations begin.
 Linux and macOS users should use:
 
 ```text
-scripts/release.sh
+release.sh
 ```
 
 ### 1. Open Terminal
@@ -314,13 +315,13 @@ cd ~/woocommerce-advanced-discount-builder
 You only need to do this once:
 
 ```bash
-chmod +x scripts/release.sh
+chmod +x release.sh
 ```
 
 ### 3. Run the release script
 
 ```bash
-./scripts/release.sh
+./release.sh
 ```
 
 The script will ask for:
@@ -698,22 +699,23 @@ Before creating a new release, verify the following:
 The project contains:
 
 ```text
-scripts/
+woocommerce-advanced-discount-builder/
 ├── release.bat
-└── release.sh
+├── release.sh
+└── ...
 ```
 
 ### Windows
 
 ```bat
-scripts\release.bat
+release.bat
 ```
 
 ### Linux / macOS
 
 ```bash
-chmod +x scripts/release.sh
-./scripts/release.sh
+chmod +x release.sh
+./release.sh
 ```
 
 Both scripts are designed to provide the same release workflow while following the conventions of their respective operating systems.
