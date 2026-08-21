@@ -155,7 +155,8 @@
 ```text
 woocommerce-advanced-discount-builder/
 ├── release.bat
-└── release.sh
+├── release.sh
+└── ...
 ```
 
 * `release.bat` — مخصوص Windows
