@@ -153,7 +153,7 @@
 این پروژه شامل دو اسکریپت انتشار است:
 
 ```text
-scripts/
+woocommerce-advanced-discount-builder/
 ├── release.bat
 └── release.sh
 ```
@@ -193,7 +193,7 @@ main
 کاربران Windows باید از فایل زیر استفاده کنند:
 
 ```text
-scripts\release.bat
+release.bat
 ```
 
 ### 1. باز کردن Command Prompt
@@ -211,7 +211,7 @@ cd D:\woocommerce-advanced-discount-builder
 ### 2. اجرای اسکریپت انتشار
 
 ```bat
-scripts\release.bat
+release.bat
 ```
 
 اسکریپت شما را مرحله‌به‌مرحله در فرآیند انتشار راهنمایی می‌کند.
@@ -290,7 +290,7 @@ Remote
 کاربران Linux و macOS باید از فایل زیر استفاده کنند:
 
 ```text
-scripts/release.sh
+release.sh
 ```
 
 ### 1. باز کردن Terminal
@@ -312,13 +312,13 @@ cd ~/woocommerce-advanced-discount-builder
 این کار فقط یک بار نیاز است:
 
 ```bash
-chmod +x scripts/release.sh
+chmod +x release.sh
 ```
 
 ### 3. اجرای اسکریپت انتشار
 
 ```bash
-./scripts/release.sh
+./release.sh
 ```
 
 اسکریپت اطلاعات زیر را از شما دریافت می‌کند:
@@ -696,22 +696,23 @@ v1.0.1
 پروژه شامل فایل‌های زیر است:
 
 ```text
-scripts/
+woocommerce-advanced-discount-builder/
 ├── release.bat
-└── release.sh
+├── release.sh
+└── ...
 ```
 
 ### Windows
 
 ```bat
-scripts\release.bat
+release.bat
 ```
 
 ### Linux / macOS
 
 ```bash
-chmod +x scripts/release.sh
-./scripts/release.sh
+chmod +x release.sh
+./release.sh
 ```
 
 هر دو اسکریپت برای ارائه یک فرآیند انتشار یکسان طراحی شده‌اند و در عین حال از استانداردها و conventions مربوط به سیستم‌عامل خود پیروی می‌کنند.
